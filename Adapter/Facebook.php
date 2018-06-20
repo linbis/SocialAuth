@@ -56,17 +56,18 @@ class Facebook extends AbstractAdapter
             if (count($tokenInfo) > 0 && isset($tokenInfo['access_token']))
             {
                 $params = array(
-                    'access_token' => $tokenInfo['access_token']
+                    'access_token' => $tokenInfo['access_token'],
+                    'fields' => implode(',', $this->fieldsMap)
                 );
 
-                $userInfo = $this->get('https://graph.facebook.com/me', $params);
+                $userInfo = $this->get('https://graph.facebook.com/v3.0/me', $params);
 
                 if (isset($userInfo['id']))
                 {
                     if ($this->lang !== 'en' && isset($userInfo['locale']) && $userInfo['locale'] !== 'en_EN')
                     {
                         $params['locale'] = $userInfo['locale'];
-                        $userInfo2 = $this->get('https://graph.facebook.com/me', $params);
+                        $userInfo2 = $this->get('https://graph.facebook.com/v3.0/me', $params);
 
                         if (isset($userInfo2['id'])) {
                             $userInfo2['gender'] = $userInfo['gender'];
